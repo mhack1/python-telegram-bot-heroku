@@ -8,7 +8,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
-TOKEN = 'YOURTELEGRAMBOTTOKEN'
+TOKEN = '152741616:AAFLBjxHEZVJMQl95l6RKM1H83kxmnKX-68'
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -53,7 +53,7 @@ def main():
         listen="0.0.0.0",
         port=int(PORT),
         url_path=TOKEN,
-        webhook_url='https://yourherokuappname.herokuapp.com/' + TOKEN
+        webhook_url='https://sheltered-wildwood-70447.herokuapp.com/' + TOKEN
     )
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
