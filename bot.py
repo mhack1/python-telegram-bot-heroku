@@ -19,7 +19,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 TOKEN = '152741616:AAFLBjxHEZVJMQl95l6RKM1H83kxmnKX-68'
-FIRST, SECOND = range(2)
+FIRST, SECOND,LOCATION = range(3)
 # Callback data
 ONE, TWO, THREE, FOUR = range(4)
 
@@ -104,6 +104,8 @@ def start(update: Update, context: CallbackContext) -> int:
         [
             InlineKeyboardButton("1", callback_data=str(ONE)),
             InlineKeyboardButton("2", callback_data=str(TWO)),
+            InlineKeyboardButton("LOCATION", callback_data=str(LOCATION)),
+
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -162,6 +164,30 @@ def end(update: Update, context: CallbackContext) -> int:
     query.answer()
     query.edit_message_text(text="See you next time!")
     return ConversationHandler.END
+def location(update: Update, context: CallbackContext) -> int:
+    """Stores the location and asks for some info about the user."""
+    user = update.message.from_user
+    user_location = update.message.location
+    logger.info(
+        "Location of %s: %f / %f", user.first_name, user_location.latitude, user_location.longitude
+    )
+    update.message.reply_text(
+        'Maybe I can visit you sometime! At last, tell me something about yourself.'
+    )
+
+    return FIRST
+
+
+def skip_location(update: Update, context: CallbackContext) -> int:
+    """Skips the location and asks for info about the user."""
+    user = update.message.from_user
+    logger.info("User %s did not send a location.", user.first_name)
+    update.message.reply_text(
+        'You seem a bit paranoid! At last, tell me something about yourself.'
+    )
+
+    return SECOND
+
 
 def main():
     """Start the bot."""
@@ -198,6 +224,10 @@ def main():
             SECOND: [
                 CallbackQueryHandler(start_over, pattern='^' + str(ONE) + '$'),
                 CallbackQueryHandler(end, pattern='^' + str(TWO) + '$'),
+            ],
+             LOCATION: [
+                MessageHandler(Filters.location, location),
+                CommandHandler('skip', skip_location),
             ],
         },
         fallbacks=[CommandHandler('start', start)],
