@@ -220,15 +220,17 @@ def main():
                 CallbackQueryHandler(two, pattern='^' + str(TWO) + '$'),
                 CallbackQueryHandler(three, pattern='^' + str(THREE) + '$'),
                 CallbackQueryHandler(four, pattern='^' + str(FOUR) + '$'),
+                 MessageHandler(Filters.location, location),
+                CommandHandler('skip', skip_location),
             ],
             SECOND: [
                 CallbackQueryHandler(start_over, pattern='^' + str(ONE) + '$'),
                 CallbackQueryHandler(end, pattern='^' + str(TWO) + '$'),
             ],
-             LOCATION: [
-                MessageHandler(Filters.location, location),
-                CommandHandler('skip', skip_location),
-            ],
+            #  LOCATION: [
+            #     MessageHandler(Filters.location, location),
+            #     CommandHandler('skip', skip_location),
+            # ],
         },
         fallbacks=[CommandHandler('start', start)],
     )
