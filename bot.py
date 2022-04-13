@@ -204,9 +204,9 @@ def main():
     )
  # Add ConversationHandler to dispatcher that will be used for handling updates
     dp.add_handler(conv_handler)
-    # dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("help", help))
     # dp.add_handler(CommandHandler("تعليمات", info))
-    dp.add_handler(CommandHandler("تعليمات", info))
+    dp.add_handler(CommandHandler("info", info))
 
     # log all errors
     dp.add_error_handler(error)
