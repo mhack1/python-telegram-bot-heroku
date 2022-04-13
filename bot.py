@@ -183,7 +183,7 @@ def main():
     # $ means "end of line/string"
     # So ^ABC$ will only allow 'ABC'
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('start', start)],
+        entry_points=[CommandHandler('start', start),CommandHandler("help", help)],
         states={
             FIRST: [
                 CallbackQueryHandler(one, pattern='^' + str(ONE) + '$'),
