@@ -142,6 +142,9 @@ def start_over(update: Update, context: CallbackContext) -> int:
 def help(update, context):
     """Send a message when the command /help is issued."""
     update.message.reply_text('Help!')
+def info(update, context):
+    """Send a message when the command /help is issued."""
+    update.message.reply_text('كيفية استخدام البوت!')
 
 def echo(update, context):
     """Echo the user message."""
@@ -201,6 +204,7 @@ def main():
  # Add ConversationHandler to dispatcher that will be used for handling updates
     dp.add_handler(conv_handler)
     dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("تعليمات", help))
 
     # log all errors
     dp.add_error_handler(error)
