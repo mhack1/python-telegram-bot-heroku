@@ -19,9 +19,9 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 TOKEN = '152741616:AAFLBjxHEZVJMQl95l6RKM1H83kxmnKX-68'
-FIRST, SECOND,LOCATION = range(3)
+FIRST, SECOND = range(3)
 # Callback data
-ONE, TWO, THREE, FOUR = range(4)
+ONE, TWO, THREE, FOUR,SHOWLOCATIONPROMPT,LOCATION = range(6)
 
 def one(update: Update, context: CallbackContext) -> int:
     """Show new choice of buttons"""
@@ -90,6 +90,17 @@ def four(update: Update, context: CallbackContext) -> int:
         text="Fourth CallbackQueryHandler, Choose a route", reply_markup=reply_markup
     )
     return FIRST
+def showlocationprompt(update: Update, context: CallbackContext) -> int:
+    """Stores the photo and asks for a location."""
+    # user = update.message.from_user
+    # photo_file = update.message.photo[-1].get_file()
+    # photo_file.download('user_photo.jpg')
+    # logger.info("Photo of %s: %s", user.first_name, 'user_photo.jpg')
+    update.message.reply_text(
+        'Gorgeous! Now, send me your location please, or send /skip if you don\'t want to.'
+    )
+
+    return LOCATION
 
 def start(update: Update, context: CallbackContext) -> int:
     """Send message on `/start`."""
@@ -104,7 +115,7 @@ def start(update: Update, context: CallbackContext) -> int:
         [
             InlineKeyboardButton("1", callback_data=str(ONE)),
             InlineKeyboardButton("2", callback_data=str(TWO)),
-            InlineKeyboardButton("LOCATION", callback_data=str(LOCATION)),
+            InlineKeyboardButton("Location", callback_data=str(SHOWLOCATIONPROMPT)),
 
         ]
     ]
@@ -126,6 +137,8 @@ def start_over(update: Update, context: CallbackContext) -> int:
         [
             InlineKeyboardButton("1", callback_data=str(ONE)),
             InlineKeyboardButton("2", callback_data=str(TWO)),
+            InlineKeyboardButton("Location", callback_data=str(SHOWLOCATIONPROMPT)),
+
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -220,6 +233,8 @@ def main():
                 CallbackQueryHandler(two, pattern='^' + str(TWO) + '$'),
                 CallbackQueryHandler(three, pattern='^' + str(THREE) + '$'),
                 CallbackQueryHandler(four, pattern='^' + str(FOUR) + '$'),
+                CallbackQueryHandler(four, pattern='^' + str(FOUR) + '$'),
+                CallbackQueryHandler(SHOWLOCATIONPROMPT, pattern='^' + str(SHOWLOCATIONPROMPT) + '$'),
                  MessageHandler(Filters.location, location),
                 CommandHandler('skip', skip_location),
             ],
